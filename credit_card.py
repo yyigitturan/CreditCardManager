@@ -66,29 +66,63 @@ class CreditCard:
         for transaction_type, amount in self._transaction_history:
             print(f"{transaction_type}: ${amount}")
         print("Current Balance:", self._balance)
+       
+class PredatoryCreditCard(CreditCard):
+    """An extension to CreditCard that compounds interest and fees."""
+
+    def __init__(self, customer, bank, acnt, limit, apr):
+        """Create a new predatory credit card instance.
+        
+        The initial balance is zero.
+        
+        customer -- the name of the customer
+        bank -- the name of the bank
+        acnt -- the account identifier
+        limit -- credit limit (measured in dollars)
+        apr -- annual percentage rate (e.g., 0.0825 for 8.25% APR)
+        """
+        super().__init__(customer, bank, acnt, limit)  # call super constructor
+        self.apr = apr
+
+    def charge(self, price):
+        """Charge given price to the card, assuming sufficient credit limit.
+        
+        Return True if charge was processed.
+        Return False and assess $5 fee if charge is denied.
+        """
+        success = super().charge(price)  # call inherited method
+        if not success:
+            self._balance += 5  # assess penalty
+        return success  # caller expects return value
+
+    def process_month(self):
+        """Assess monthly interest on outstanding balance."""
+        if self._balance > 0:
+            monthly_factor = pow(1 + self.apr, 1 / 12)
+            self._balance *= monthly_factor
             
+# Create a PredatoryCreditCard instance
+pcc = PredatoryCreditCard("John", "YGT Bank", "5391 0375 9387 5310", 2000, 0.18)
 
-# Create a CreditCard instance
-cc = CreditCard("Michael", "YGT Bank", "5391 0375 9387 5309", 1000)
-
-# Get and print the customer information
-cc.get_customer()
-cc.get_bank()
-cc.get_account()
-cc.get_limit()
-cc.get_balance()
-
-# Perform a transaction of 500 units
-cc.charge(500)
+# Perform a transaction of 1500 units
+pcc.charge(1500)
 
 # Get and print the updated balance
-cc.get_balance()
+pcc.get_balance()
 
-# Make a payment of 200 units
-cc.make_payment(200)
+# Make a payment of 500 units
+pcc.make_payment(500)
 
 # Get and print the updated balance
-cc.get_balance()
+pcc.get_balance()
+
+# Apply monthly interest
+pcc.process_month()
 
 # Print the transaction history and current balance
-cc.get_transaction_history()
+pcc.get_transaction_history()
+
+
+
+
+
