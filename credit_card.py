@@ -108,21 +108,16 @@ pcc = PredatoryCreditCard("John", "YGT Bank", "5391 0375 9387 5310", 2000, 0.18)
 pcc.charge(1500)
 
 # Get and print the updated balance
-pcc.get_balance()
+print("Updated Balance:", pcc.get_balance())
 
 # Make a payment of 500 units
 pcc.make_payment(500)
 
 # Get and print the updated balance
-pcc.get_balance()
+print("Updated Balance:", pcc.get_balance())
 
 # Apply monthly interest
 pcc.process_month()
 
 # Print the transaction history and current balance
 pcc.get_transaction_history()
-
-
-
-
-
